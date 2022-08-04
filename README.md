@@ -17,3 +17,8 @@ You *cannot* activate your Windows 10 edition with HWID, you'll have to switch t
 ## Credits
 
 - [slc.dll](https://github.com/Gamers-Against-Weed/Integrated_Patcher_3)
+
+## TODO
+
+- Add an online mode for normal KMS activation
+- (maybe) Add MS Office activation support
