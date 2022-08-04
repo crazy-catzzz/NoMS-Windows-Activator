@@ -9,6 +9,7 @@ param (
 function HWID-GetKey {}
 function KMS38-GetKey {}
 function Get-BuildNumber {}
+function Get-SKU {}
 
 # Main program
 function main {
@@ -101,6 +102,12 @@ function KMS38-GetKey {
 function Get-BuildNumber {
     process {
         [int](Get-CimInstance -Query 'SELECT BuildNumber FROM Win32_OperatingSystem').BuildNumber
+    }
+}
+
+function Get-SKU {
+    process {
+        [int](Get-CimInstance -Query 'SELECT OperatingSystem FROM Win32_OperatingSystem').OperatingSystemSKU
     }
 }
 
