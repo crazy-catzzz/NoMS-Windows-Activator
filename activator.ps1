@@ -92,3 +92,5 @@ function HWID-GetKey {
 
     }
 }
+
+main
