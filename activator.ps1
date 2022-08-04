@@ -18,6 +18,10 @@ function Install-ProductKey {}
 function Set-KMSMachine {}
 function Key-isKMS38 {}
 
+function patchGatherosstate {}
+function generateGenuineTicket {}
+function applyGenuineTicket {}
+
 # Main program
 function main {
     Push-Location -Path $PSScriptRoot
@@ -80,32 +84,13 @@ function main {
     }
 
 
-    Write-Host "Patching gatherosstate.exe ..."
-    $Process = Start-Process -FilePath 'rundll32.exe' -ArgumentList """$PSScriptRoot\slc.dll"",PatchGatherosstate" -PassThru -Wait
-    if ($Process.ExitCode -ne 0) {
-        Write-Error "Cannot patch gatherosstate.exe!"
-        script-Exit
-    }
-    Write-Host "Success!"
+    patchGatherosstate
 
 
-    Write-Host "Generating GenuineTicket.xml ..."
-    $Process = Start-Process -FilePath "$PSScriptRoot\gatherosstatemodified.exe" -PassThru -Wait
-    if ($Process.ExitCode -ne 0) {
-        Write-Error "Cannot generate GenuineTicket.xml!"
-        script-Exit
-    }
-    Write-Host "Success!"
+    generateGenuineTicket
 
 
-    Write-Host "Applying GenuineTicket.xml ..."
-    Copy-Item -Path "$PSScriptRoot\GenuineTicket.xml" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\ClipSVC\GenuineTicket" -Force
-    $Process = Start-Process -FilePath 'ClipUp.exe' -ArgumentList '-o' -PassThru -WindowStyle Hidden -Wait
-    if ($Process.ExitCode -ne 0) {
-        Write-Error "Cannot apply GenuineTicket.xml!"
-        script-Exit
-    }
-    Write-Host "Success!"
+    applyGenuineTicket
 
 
     Write-Host "Activating..."
@@ -412,6 +397,38 @@ function Key-isKMS38 {
 
         $false
     }
+}
+
+
+function patchGatherosstate {
+    Write-Host "Patching gatherosstate.exe ..."
+    $Process = Start-Process -FilePath 'rundll32.exe' -ArgumentList """$PSScriptRoot\slc.dll"",PatchGatherosstate" -PassThru -Wait
+    if ($Process.ExitCode -ne 0) {
+        Write-Error "Cannot patch gatherosstate.exe!"
+        script-Exit
+    }
+    Write-Host "Success!"
+}
+
+function generateGenuineTicket {
+    Write-Host "Generating GenuineTicket.xml ..."
+    $Process = Start-Process -FilePath "$PSScriptRoot\gatherosstatemodified.exe" -PassThru -Wait
+    if ($Process.ExitCode -ne 0) {
+        Write-Error "Cannot generate GenuineTicket.xml!"
+        script-Exit
+    }
+    Write-Host "Success!"
+}
+
+function applyGenuineTicket {
+    Write-Host "Applying GenuineTicket.xml ..."
+    Copy-Item -Path "$PSScriptRoot\GenuineTicket.xml" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\ClipSVC\GenuineTicket" -Force
+    $Process = Start-Process -FilePath 'ClipUp.exe' -ArgumentList '-o' -PassThru -WindowStyle Hidden -Wait
+    if ($Process.ExitCode -ne 0) {
+        Write-Error "Cannot apply GenuineTicket.xml!"
+        script-Exit
+    }
+    Write-Host "Success!"
 }
 
 main
