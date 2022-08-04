@@ -80,7 +80,6 @@ function main {
     }
 
 
-    # hmm
     Write-Host "Patching gatherosstate.exe ..."
     $Process = Start-Process -FilePath 'rundll32.exe' -ArgumentList """$PSScriptRoot\slc.dll"",PatchGatherosstate" -PassThru -Wait
     if ($Process.ExitCode -ne 0) {
@@ -98,6 +97,16 @@ function main {
     }
     Write-Host "Success!"
 
+
+    Write-Host "Applying GenuineTicket.xml ..."
+    Copy-Item -Path "$PSScript\GenuineTicket.xml" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\ClipSVC\GenuineTicket" -Force
+    $Process = Start-Process -FilePath 'ClipUp.exe' -ArgumentList '-o' -PassThru -WindowStyle Hidden -Wait
+    if ($Process.ExitCode -ne 0) {
+        Write-Error "Cannot apply GenuineTicket.xml!"
+        script-Exit
+    }
+    Write-Host "Success!"
+    
 
     Write-Host "Activating..."
     if (!(Key-isKMS38 -key $ProductKey)) {
@@ -314,9 +323,7 @@ function Get-SKU { # Gets the SKU ID
 
 function activate {
     process { # Invoke Activate method
-        $tss = Get-CimClass -ClassName "SoftwareLicensingProduct" -Query 'SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = ''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL'
-        $tss.Activate()
-        #Invoke-CimMethod -MethodName 'Activate' -Query 'SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = ''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL' -ErrorAction Stop | Out-Null
+        Invoke-CimMethod -MethodName 'Activate' -Query 'SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = ''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL' -ErrorAction Stop | Out-Null
     }
 }
 
