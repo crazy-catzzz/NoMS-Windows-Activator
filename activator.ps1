@@ -8,6 +8,7 @@ param (
 # Function prototypes
 function HWID-GetKey {}
 function KMS38-GetKey {}
+function Get-BuildNumber {}
 
 # Main program
 function main {
@@ -90,6 +91,16 @@ function HWID-GetKey {
 
         $ProductKey
 
+    }
+}
+
+function KMS38-GetKey {
+
+}
+
+function Get-BuildNumber {
+    process {
+        [int](Get-CimInstance -Query 'SELECT BuildNumber FROM Win32_OperatingSystem').BuildNumber
     }
 }
 
