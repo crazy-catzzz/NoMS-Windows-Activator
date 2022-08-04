@@ -314,7 +314,9 @@ function Get-SKU { # Gets the SKU ID
 
 function activate {
     process { # Invoke Activate method
-        Invoke-CimMethod -MethodName 'Activate' -Query 'SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = ''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL' -ErrorAction Stop | Out-Null
+        $tss = Get-CimClass -ClassName "SoftwareLicensingProduct" -Query 'SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = ''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL'
+        $tss.Activate()
+        #Invoke-CimMethod -MethodName 'Activate' -Query 'SELECT * FROM SoftwareLicensingProduct WHERE ApplicationID = ''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL' -ErrorAction Stop | Out-Null
     }
 }
 
