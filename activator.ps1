@@ -107,7 +107,7 @@ function Get-BuildNumber {
 
 function Get-SKU {
     process {
-        [int](Get-CimInstance -Query 'SELECT OperatingSystem FROM Win32_OperatingSystem').OperatingSystemSKU
+        [int](Get-CimInstance -Query 'SELECT OperatingSystemSKU FROM Win32_OperatingSystem').OperatingSystemSKU
     }
 }
 
