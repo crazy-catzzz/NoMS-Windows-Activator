@@ -39,7 +39,7 @@ function main {
         "slc.dll"
     )
     foreach ($requiredFile in $required) {
-        if (!(Test-Path -Path "$PSScriptRoot\required\$requiredFile")) {
+        if (!(Test-Path -Path "$PSScriptRoot\$requiredFile")) {
             Write-Error "Missing required files! Download both slc.dll and/or gatherosstate.exe!"
             script-Exit
         }
@@ -82,7 +82,7 @@ function main {
 
     # hmm
     Write-Host "Patching gatherosstate.exe ..."
-    $Process = Start-Process -FilePath 'rundll32.exe' -ArgumentList """$PSScriptRoot\required\slc.dll"",PatchGatherosstate" -PassThru -Wait
+    $Process = Start-Process -FilePath 'rundll32.exe' -ArgumentList """$PSScriptRoot\slc.dll"",PatchGatherosstate" -PassThru -Wait
     if ($Process.ExitCode -ne 0) {
         Write-Error "Cannot patch gatherosstate.exe!"
         script-Exit
@@ -91,7 +91,7 @@ function main {
 
 
     Write-Host "Generating GenuineTicket.xml ..."
-    $Process = Start-Process -FilePath "$PSScriptRoot\required\gatherosstatemodified.exe" -PassThru -Wait
+    $Process = Start-Process -FilePath "$PSScriptRoot\gatherosstatemodified.exe" -PassThru -Wait
     if ($Process.ExitCode -ne 0) {
         Write-Error "Cannot generate GenuineTicket.xml!"
         script-Exit
@@ -127,8 +127,8 @@ function script-Exit { # Deletes temporary files and exits
         )
 
         foreach ($tempFile in $temp) {
-            if (Test-Path -Path "required\$tempFile") {
-                Remove-Item -Path "required\$tempFile" -Force
+            if (Test-Path -Path "$tempFile") {
+                Remove-Item -Path "$tempFile" -Force
             }
         }
 
