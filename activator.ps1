@@ -99,14 +99,14 @@ function main {
 
 
     Write-Host "Applying GenuineTicket.xml ..."
-    Copy-Item -Path "$PSScript\GenuineTicket.xml" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\ClipSVC\GenuineTicket" -Force
+    Copy-Item -Path "$PSScriptRoot\GenuineTicket.xml" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\ClipSVC\GenuineTicket" -Force
     $Process = Start-Process -FilePath 'ClipUp.exe' -ArgumentList '-o' -PassThru -WindowStyle Hidden -Wait
     if ($Process.ExitCode -ne 0) {
         Write-Error "Cannot apply GenuineTicket.xml!"
         script-Exit
     }
     Write-Host "Success!"
-    
+
 
     Write-Host "Activating..."
     if (!(Key-isKMS38 -key $ProductKey)) {
